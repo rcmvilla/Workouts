@@ -9,274 +9,313 @@
 <meta name="theme-color" content="#0f0f0f"/>
 <title>Daily Workout</title>
 <style>
-  :root {
-    --bg: #0f0f0f; --card: #181818; --border: #2a2a2a;
-    --accent: #c8f542; --text: #f0f0f0; --muted: #888;
-    --upper: #42b4f5; --lower: #f5a442; --core: #c842f5;
-    --eq-vest: #f5a442; --eq-a4: #42f5c8; --eq-a2: #42d4f5;
-    --eq-w4: #a0f542; --eq-bw: #888;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  body { background: var(--bg); color: var(--text); font-family: 'DM Mono', 'Courier New', monospace; min-height: 100vh; padding-bottom: env(safe-area-inset-bottom, 20px); }
-
-  /* Header */
-  .header { background: #111; border-bottom: 1px solid var(--border); padding: 52px 20px 16px; position: sticky; top: 0; z-index: 100; }
-  .header-label { font-size: 10px; letter-spacing: 3px; color: var(--accent); font-weight: 700; text-transform: uppercase; }
-  .header-title { font-size: 22px; font-weight: 700; margin-top: 4px; letter-spacing: -0.5px; }
-  .mode-row { display: flex; gap: 8px; margin-top: 14px; }
-  .mode-btn { padding: 8px 20px; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 700; border: 1px solid var(--border); background: transparent; color: var(--muted); transition: all 0.2s; }
-  .mode-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
-
-  /* Content */
-  .content { max-width: 640px; margin: 0 auto; padding: 20px; }
-
-  /* Gear bar */
-  .gear-bar { display: flex; gap: 6px; flex-wrap: wrap; padding: 12px 14px; border-radius: 8px; background: #151515; border: 1px solid var(--border); margin-bottom: 20px; align-items: center; }
-  .gear-label { font-size: 10px; color: var(--muted); margin-right: 4px; }
-  .gear-tag { font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: 600; }
-
-  /* Phase block */
-  .phase { border-radius: 12px; overflow: hidden; border: 1px solid; margin-bottom: 16px; }
-  .phase-header { padding: 10px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid; }
-  .phase-icon { font-size: 18px; }
-  .phase-name { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
-  .phase-title { font-size: 15px; font-weight: 700; margin-top: 1px; }
-  .phase-count { margin-left: auto; font-size: 12px; color: var(--muted); }
-
-  /* Exercise row */
-  .ex-row { border-bottom: 1px solid var(--border); }
-  .ex-row:last-child { border-bottom: none; }
-  .ex-main { display: flex; align-items: center; gap: 10px; padding: 12px 16px; cursor: pointer; transition: background 0.15s; }
-  .ex-main:active { background: #1e1e1e; }
-  .ex-num { color: var(--muted); font-size: 11px; min-width: 20px; }
-  .ex-info { flex: 1; }
-  .ex-name { font-weight: 600; font-size: 14px; }
-  .ex-sets { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .ex-tags { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; max-width: 120px; }
-  .eq-tag { font-size: 9px; padding: 2px 5px; border-radius: 4px; font-weight: 600; white-space: nowrap; }
-  .timer-btn { padding: 5px 10px; border-radius: 6px; cursor: pointer; font-family: monospace; font-weight: 700; font-size: 11px; border: 1px solid var(--border); background: #1e1e1e; color: var(--muted); white-space: nowrap; transition: all 0.2s; min-width: 72px; text-align: center; position: relative; overflow: hidden; }
-  .timer-btn.running { border-color: var(--accent); color: var(--accent); background: #1a2a00; }
-  .timer-progress { position: absolute; left: 0; top: 0; bottom: 0; background: #c8f54220; transition: width 1s linear; pointer-events: none; }
-  .chevron { color: var(--muted); font-size: 10px; margin-left: 2px; }
-  .ex-tip { padding: 10px 16px 14px 46px; font-size: 13px; color: #aaa; line-height: 1.6; font-style: italic; border-top: 1px solid var(--border); display: none; }
-  .ex-tip.open { display: block; }
-
-  /* Notes */
-  .notes { margin-top: 24px; padding: 16px; border-radius: 10px; background: #151515; border: 1px solid var(--border); }
-  .notes-title { font-size: 10px; color: var(--accent); letter-spacing: 2px; font-weight: 700; margin-bottom: 12px; }
-  .note-item { display: flex; gap: 10px; margin-bottom: 8px; font-size: 12px; color: #999; line-height: 1.5; }
-  .note-arrow { color: var(--accent); min-width: 16px; }
+  :root{--bg:#0f0f0f;--card:#181818;--border:#2a2a2a;--accent:#c8f542;--text:#f0f0f0;--muted:#888;--upper:#42b4f5;--lower:#f5a442;--core:#c842f5;--hiit:#f54242;}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Mono','Courier New',monospace;min-height:100vh;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 20px);}
+  .tab-bar{display:flex;background:#111;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding-top:env(safe-area-inset-top,0px);}
+  .tab{flex:1;padding:16px 8px 14px;text-align:center;cursor:pointer;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s;}
+  .tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+  .page{display:none;}.page.active{display:block;}
+  .content{max-width:640px;margin:0 auto;padding:20px;}
+  .s-header{background:#111;border-bottom:1px solid var(--border);padding:20px 20px 16px;position:sticky;top:46px;z-index:90;}
+  .s-header .inner{max-width:640px;margin:0 auto;}
+  .lbl{font-size:10px;letter-spacing:3px;color:var(--accent);font-weight:700;text-transform:uppercase;}
+  .ttl{font-size:22px;font-weight:700;margin-top:4px;letter-spacing:-0.5px;}
+  .mode-row{display:flex;gap:8px;margin-top:14px;}
+  .mbtn{padding:8px 20px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all 0.2s;}
+  .mbtn.active{background:var(--accent);color:#000;border-color:var(--accent);}
+  .gear-bar{display:flex;gap:6px;flex-wrap:wrap;padding:12px 14px;border-radius:8px;background:#151515;border:1px solid var(--border);margin-bottom:20px;align-items:center;}
+  .gear-bar span{font-size:10px;color:var(--muted);margin-right:4px;}
+  .gtag{font-size:10px;padding:3px 8px;border-radius:4px;font-weight:600;}
+  .phase{border-radius:12px;overflow:hidden;border:1px solid;margin-bottom:16px;}
+  .ph{padding:10px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid;}
+  .ph-icon{font-size:18px;}.ph-name{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;}.ph-title{font-size:15px;font-weight:700;margin-top:1px;}.ph-cnt{margin-left:auto;font-size:12px;color:var(--muted);}
+  .ex-row{border-bottom:1px solid var(--border);}.ex-row:last-child{border-bottom:none;}
+  .ex-main{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;transition:background 0.15s;}.ex-main:active{background:#1e1e1e;}
+  .ex-num{color:var(--muted);font-size:11px;min-width:20px;}.ex-info{flex:1;}.ex-name{font-weight:600;font-size:14px;}.ex-sets{font-size:12px;color:var(--muted);margin-top:2px;}
+  .ex-tags{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:120px;}
+  .etag{font-size:9px;padding:2px 5px;border-radius:4px;font-weight:600;white-space:nowrap;}
+  .tbtn{padding:5px 10px;border-radius:6px;cursor:pointer;font-family:monospace;font-weight:700;font-size:11px;border:1px solid var(--border);background:#1e1e1e;color:var(--muted);white-space:nowrap;transition:all 0.2s;min-width:72px;text-align:center;position:relative;overflow:hidden;}
+  .tbtn.running{border-color:var(--accent);color:var(--accent);background:#1a2a00;}
+  .tprog{position:absolute;left:0;top:0;bottom:0;background:#c8f54220;transition:width 1s linear;pointer-events:none;}
+  .chev{color:var(--muted);font-size:10px;margin-left:2px;}
+  .ex-tip{padding:10px 16px 14px 46px;font-size:13px;color:#aaa;line-height:1.6;font-style:italic;border-top:1px solid var(--border);display:none;}.ex-tip.open{display:block;}
+  .notes{margin-top:24px;padding:16px;border-radius:10px;background:#151515;border:1px solid var(--border);}
+  .ntitle{font-size:10px;color:var(--accent);letter-spacing:2px;font-weight:700;margin-bottom:12px;}
+  .ni{display:flex;gap:10px;margin-bottom:8px;font-size:12px;color:#999;line-height:1.5;}
+  .na{color:var(--accent);min-width:16px;}
+  /* HIIT */
+  .hiit-hero{background:linear-gradient(135deg,#1a0505,#0f0f0f);border-bottom:1px solid #3a1a1a;padding:24px 20px 20px;}
+  .hiit-hero .inner{max-width:640px;margin:0 auto;}
+  .hlbl{font-size:10px;letter-spacing:3px;color:var(--hiit);font-weight:700;text-transform:uppercase;}
+  .httl{font-size:22px;font-weight:700;margin-top:4px;}
+  .hsub{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;}
+  .hstats{display:flex;gap:12px;margin-top:16px;}
+  .hstat{flex:1;background:#1e0f0f;border:1px solid #3a1a1a;border-radius:8px;padding:10px 12px;text-align:center;}
+  .hstat-v{font-size:20px;font-weight:700;color:var(--hiit);}
+  .hstat-l{font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:2px;text-transform:uppercase;}
+  .hblock{border-radius:12px;overflow:hidden;border:1px solid var(--border);margin-bottom:16px;}
+  .hbh{padding:10px 16px;display:flex;align-items:center;gap:10px;background:#1a1a1a;border-bottom:1px solid var(--border);}
+  .hbt{font-size:10px;color:var(--hiit);font-weight:700;letter-spacing:2px;}
+  .hbn{font-size:15px;font-weight:700;margin-top:1px;}
+  .hbd{margin-left:auto;font-size:12px;color:var(--muted);}
+  .hex{padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.15s;}.hex:last-child{border-bottom:none;}.hex:active{background:#1e1e1e;}
+  .hext{display:flex;align-items:center;gap:10px;}
+  .hdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  .hen{font-weight:600;font-size:14px;flex:1;}
+  .hem{font-size:12px;color:var(--muted);}
+  .hetip{font-size:12px;color:#aaa;font-style:italic;line-height:1.5;margin-top:8px;padding-left:18px;display:none;}.hetip.open{display:block;}
+  /* LADDER */
+  .lcard{background:#151515;border:1px solid var(--border);border-radius:12px;padding:16px;margin:12px 16px;}
+  .ltitle{font-size:10px;color:var(--accent);letter-spacing:2px;font-weight:700;text-transform:uppercase;margin-bottom:4px;}
+  .lname{font-size:17px;font-weight:700;margin-bottom:8px;}
+  .ldesc{font-size:12px;color:#aaa;line-height:1.6;margin-bottom:14px;}
+  .lgrid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+  .rung{width:42px;height:42px;border-radius:8px;border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;background:#1a1a1a;}
+  .rung.done{background:#1a2a00;border-color:var(--accent);}.rung.done .rn{color:var(--accent);}
+  .rung.cur{background:#2a1a00;border-color:var(--lower);box-shadow:0 0 8px #f5a44244;}.rung.cur .rn{color:var(--lower);}
+  .rn{font-size:13px;font-weight:700;}.rl{font-size:8px;color:var(--muted);margin-top:1px;}
+  .lctrls{display:flex;gap:8px;}
+  .lcbtn{flex:1;padding:10px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:700;border:1px solid var(--border);background:#1e1e1e;color:var(--text);transition:all 0.2s;}
+  .lcbtn.primary{background:var(--hiit);border-color:var(--hiit);color:#fff;}
+  .lcbtn:active{opacity:0.8;}
+  .lstatus{text-align:center;font-size:13px;color:var(--muted);margin-top:12px;min-height:20px;}
+  .lstatus strong{color:var(--text);}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-label">Daily Plan</div>
-  <div class="header-title">Full Body Calisthenics</div>
-  <div class="mode-row">
-    <button class="mode-btn active" onclick="setMode(15)" id="btn15">15 min</button>
-    <button class="mode-btn" onclick="setMode(30)" id="btn30">30 min</button>
+<div class="tab-bar">
+  <div class="tab active" onclick="showTab('strength')" id="tab-strength">💪 Strength</div>
+  <div class="tab" onclick="showTab('hiit')" id="tab-hiit">🔥 HIIT</div>
+</div>
+
+<!-- STRENGTH -->
+<div class="page active" id="page-strength">
+  <div class="s-header">
+    <div class="inner">
+      <div class="lbl">Daily Plan</div>
+      <div class="ttl">Full Body Calisthenics</div>
+      <div class="mode-row">
+        <button class="mbtn active" onclick="setMode(15)" id="btn15">15 min</button>
+        <button class="mbtn" onclick="setMode(30)" id="btn30">30 min</button>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="gear-bar">
+      <span>GEAR:</span>
+      <span class="gtag" style="background:#f5a44222;border:1px solid #f5a44266;color:#f5a442">10kg Vest</span>
+      <span class="gtag" style="background:#42f5c822;border:1px solid #42f5c866;color:#42f5c8">4kg Ankle</span>
+      <span class="gtag" style="background:#42d4f522;border:1px solid #42d4f566;color:#42d4f5">2kg Ankle</span>
+      <span class="gtag" style="background:#a0f54222;border:1px solid #a0f54266;color:#a0f542">4kg Wrist</span>
+      <span class="gtag" style="background:#88888822;border:1px solid #88888866;color:#888">BW</span>
+    </div>
+    <div id="workout-container"></div>
+    <div class="notes">
+      <div class="ntitle">COACHING NOTES</div>
+      <div class="ni"><span class="na">→</span><span>Rotate ankle weights between wrist and ankle positions to vary stimulus.</span></div>
+      <div class="ni"><span class="na">→</span><span>Wear vest for squats and lunges before pulling exercises.</span></div>
+      <div class="ni"><span class="na">→</span><span>Donkey kicks + glute bridges = glute growth without a barbell.</span></div>
+      <div class="ni"><span class="na">→</span><span>Hanging leg raises train core AND grip — double duty.</span></div>
+      <div class="ni"><span class="na">→</span><span>Supinate (chin-up) grip hits biceps ~30% more than pronated.</span></div>
+    </div>
   </div>
 </div>
 
-<div class="content">
-  <div class="gear-bar">
-    <span class="gear-label">GEAR:</span>
-    <span class="gear-tag" style="background:#f5a44222;border:1px solid #f5a44266;color:#f5a442">10kg Vest</span>
-    <span class="gear-tag" style="background:#42f5c822;border:1px solid #42f5c866;color:#42f5c8">4kg Ankle</span>
-    <span class="gear-tag" style="background:#42d4f522;border:1px solid #42d4f566;color:#42d4f5">2kg Ankle</span>
-    <span class="gear-tag" style="background:#a0f54222;border:1px solid #a0f54266;color:#a0f542">4kg Wrist</span>
-    <span class="gear-tag" style="background:#88888822;border:1px solid #88888866;color:#888">BW</span>
+<!-- HIIT -->
+<div class="page" id="page-hiit">
+  <div class="hiit-hero">
+    <div class="inner">
+      <div class="hlbl">Mountaineering Conditioning</div>
+      <div class="httl">30-Min HIIT Session</div>
+      <div class="hsub">VO2max + lactate threshold + functional endurance.<br>Target 90–95% max HR during work blocks.</div>
+      <div class="hstats">
+        <div class="hstat"><div class="hstat-v">30</div><div class="hstat-l">Minutes</div></div>
+        <div class="hstat"><div class="hstat-v">5</div><div class="hstat-l">Blocks</div></div>
+        <div class="hstat"><div class="hstat-v">190</div><div class="hstat-l">Punches</div></div>
+      </div>
+    </div>
   </div>
+  <div class="content">
 
-  <div id="workout-container"></div>
+    <div class="hblock">
+      <div class="hbh"><div><div class="hbt">00:00</div><div class="hbn">🌡️ Warm-Up</div></div><span class="hbd">5 min</span></div>
+      <div class="hex" onclick="toggleHT(this)"><div class="hext"><div class="hdot" style="background:#42b4f5"></div><div class="hen">Arm circles + shoulder rolls</div><div class="hem">1 min</div></div><div class="hetip">Forward and backward. Start small, get bigger. Prepares the rotator cuff for hanging and punching.</div></div>
+      <div class="hex" onclick="toggleHT(this)"><div class="hext"><div class="hdot" style="background:#42b4f5"></div><div class="hen">Hip hinge drill (bench)</div><div class="hem">1 min</div></div><div class="hetip">Elbows on bench, wide stance, soft knees. Drive hips BACK until you feel the hamstring stretch, then thrust forward and squeeze glutes hard at the end. Slow here — you're waking up the posterior chain, not loading it yet.</div></div>
+      <div class="hex" onclick="toggleHT(this)"><div class="hext"><div class="hdot" style="background:#42b4f5"></div><div class="hen">Bodyweight squats</div><div class="hem">1 min</div></div><div class="hetip">Slow and deep. 1 sec pause at the bottom. Getting blood into the quads and glutes before load.</div></div>
+      <div class="hex" onclick="toggleHT(this)"><div class="hext"><div class="hdot" style="background:#42b4f5"></div><div class="hen">Dead hang + shoulder shrugs</div><div class="hem">1 min</div></div><div class="hetip">Hang relaxed 20 sec, then shrug shoulders toward ears and hold 2 sec. Activates the serratus and lats before loaded pulling.</div></div>
+      <div class="hex" onclick="toggleHT(this)"><div class="hext"><div class="hdot" style="background:#42b4f5"></div><div class="hen">Skip rope or high knees</div><div class="hem">1 min</div></div><div class="hetip">Skip if you can, high knees if not — same stimulus. Just lifting HR to ~70% before the work starts. Don't worry about skipping technique yet.</div></div>
+    </div>
 
-  <div class="notes">
-    <div class="notes-title">COACHING NOTES</div>
-    <div class="note-item"><span class="note-arrow">→</span><span>Rotate ankle weights between wrist and ankle positions to vary stimulus.</span></div>
-    <div class="note-item"><span class="note-arrow">→</span><span>Wear vest for squats and lunges before pulling exercises.</span></div>
-    <div class="note-item"><span class="note-arrow">→</span><span>Donkey kicks + glute bridges = glute growth without a barbell.</span></div>
-    <div class="note-item"><span class="note-arrow">→</span><span>Hanging leg raises train core AND grip — double duty.</span></div>
-    <div class="note-item"><span class="note-arrow">→</span><span>Supinate (chin-up) grip hits biceps ~30% more than pronated.</span></div>
-    <div class="note-item"><span class="note-arrow">→</span><span>Listen to shoulder fatigue — reduce vest weight if joints feel strained.</span></div>
+    <div class="hblock">
+      <div class="hbh"><div><div class="hbt">05:00</div><div class="hbn">🥊 Krav Ladder</div></div><span class="hbd">~15 min</span></div>
+      <div class="hex" onclick="toggleHT(this)"><div class="hext"><div class="hdot" style="background:var(--hiit)"></div><div class="hen">Burpee → punch ladder</div><div class="hem">2 → 20 → 2</div></div><div class="hetip">1 burpee, then 2 punches (L-R). 1 burpee, then 4 punches. Up to 20 then back down to 2. 19 burpees total, 190 punches. Rest only when you genuinely need it. Add vest once you finish clean without it.</div></div>
+      <div class="lcard">
+        <div class="ltitle">Ladder Tracker</div>
+        <div class="lname">Krav Conditioning Ladder</div>
+        <div class="ldesc">Tap each rung as you complete it. Each rung = 1 burpee + punches shown. Up to 20, then back down.</div>
+        <div class="lgrid" id="lgrid"></div>
+        <div class="lstatus" id="lstatus">Tap a rung to start</div>
+        <div style="margin-top:12px;display:flex;gap:8px;">
+          <button class="lcbtn" onclick="resetLadder()">↺ Reset</button>
+          <button class="lcbtn primary" onclick="nextRung()">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="hblock">
+      <div class="hbh"><div><div class="hbt">20:00</div><div class="hbn">⚡ Core & Posterior Chain</div></div><span class="hbd">5 min</span></div>
+      <div class="hex" onclick="toggleHT(this)"><div class="hext"><div class="hdot" style="background:var(--core)"></div><div class="hen">Hip hinge — loaded</div><div class="hem">3 × 15</div></div><div class="hetip">Now with 10kg vest. Elbows on bench, wide stance, soft knees. Drive hips BACK — feel the hamstring load — then thrust forward and squeeze glutes hard. This is the same movement as a kettlebell swing or Romanian deadlift. It directly mimics the hip mechanics of moving uphill under load. 45 sec rest between sets.</div></div>
+      <div class="hex" onclick="toggleHT(this)"><div class="hext"><div class="hdot" style="background:var(--core)"></div><div class="hen">Hanging knee raises</div><div class="hem">3 × 12</div></div><div class="hetip">2kg ankle weights. Control both the raise and the lower. After the ladder your grip will be wrecked — that's the point. Core + grip endurance together.</div></div>
+      <div class="hex" onclick="toggleHT(this)"><div class="hext"><div class="hdot" style="background:var(--core)"></div><div class="hen">Plank hold</div><div class="hem">2 × 45 sec</div></div><div class="hetip">Vest on. Elbows or hands — elbows are harder. Squeeze everything: glutes, abs, quads. Breathe slowly. Anti-rotation core stability is critical for load-carrying on steep mountain terrain.</div></div>
+    </div>
+
+    <div class="hblock">
+      <div class="hbh"><div><div class="hbt">25:00</div><div class="hbn">🏔️ Cardio Finisher</div></div><span class="hbd">3 min</span></div>
+      <div class="hex" onclick="toggleHT(this)"><div class="hext"><div class="hdot" style="background:var(--lower)"></div><div class="hen">Skip rope or high knees</div><div class="hem">3 × 40 sec / 20 sec rest</div></div><div class="hetip">Vest on. If skipping: aim for fast singles or double-unders if you can. If high knees: pump arms hard, drive knees to hip height. You should not be able to hold a conversation. This is the VO2max spike.</div></div>
+      <div class="hex" onclick="toggleHT(this)"><div class="hext"><div class="hdot" style="background:var(--lower)"></div><div class="hen">Weighted step-ups</div><div class="hem">40 sec fast pace</div></div><div class="hetip">Chair, bench, or stairs. Vest on + 4kg ankles. Drive through the heel of the stepping leg. This directly simulates alpine approach terrain with a loaded pack.</div></div>
+    </div>
+
+    <div class="hblock">
+      <div class="hbh"><div><div class="hbt">28:00</div><div class="hbn">❄️ Cool-Down</div></div><span class="hbd">2 min</span></div>
+      <div class="hex" onclick="toggleHT(this)"><div class="hext"><div class="hdot" style="background:#42b4f5"></div><div class="hen">Dead hang</div><div class="hem">2 × 30 sec</div></div><div class="hetip">Pure decompression. Let spine and shoulders fully relax. Breathe slowly through the nose. HR drops fast.</div></div>
+      <div class="hex" onclick="toggleHT(this)"><div class="hext"><div class="hdot" style="background:#42b4f5"></div><div class="hen">Hip hinge stretch (slow)</div><div class="hem">1 min</div></div><div class="hetip">Same bench position but no load, slow pace. Drive hips back and hold 5 sec at the stretch. Hamstrings and glutes will be tight — this prevents next-day soreness.</div></div>
+      <div class="hex" onclick="toggleHT(this)"><div class="hext"><div class="hdot" style="background:#42b4f5"></div><div class="hen">Box breathing</div><div class="hem">5 rounds</div></div><div class="hetip">Inhale 4 sec → hold 4 sec → exhale 4 sec → hold 4 sec. Activates the parasympathetic system. At altitude, when you're hypoxic and your body is panicking, this is what keeps you moving when others stop. Train it now so it's automatic.</div></div>
+    </div>
+
+    <div class="notes">
+      <div class="ntitle">MOUNTAINEERING NOTES</div>
+      <div class="ni"><span class="na">→</span><span>Do this 2–3x per week, not daily. Alternate with strength days.</span></div>
+      <div class="ni"><span class="na">→</span><span>The hip hinge is the most transferable exercise here — it's the exact mechanics of cramponing uphill under load.</span></div>
+      <div class="ni"><span class="na">→</span><span>Skip rope even badly still builds foot coordination useful on technical terrain.</span></div>
+      <div class="ni"><span class="na">→</span><span>Zone 2 cardio (long slow hikes with vest) builds the aerobic base this HIIT sits on top of.</span></div>
+      <div class="ni"><span class="na">→</span><span>Box breathing practiced here becomes automatic at altitude when you're hypoxic.</span></div>
+    </div>
   </div>
 </div>
 
 <script>
-const WORKOUTS = {
-  15: [
-    {
-      phase: "UPPER", label: "Pull & Push", color: "#42b4f5", icon: "🔼",
-      exercises: [
-        { name: "Pull-Ups", sets: 3, reps: "Max", rest: 45, eq: [{l:"BW",c:"#888"}], tip: "Go to failure each set. Add vest once you can do 10+ clean reps." },
-        { name: "Chin-Ups", sets: 2, reps: "Max", rest: 45, eq: [{l:"BW",c:"#888"}], tip: "Supinated grip — hits biceps harder. Pause at top." },
-        { name: "Hanging Knee Raises", sets: 2, reps: 12, rest: 30, eq: [{l:"4kg Wrist",c:"#a0f542"}], tip: "Strap 2kg wrist weights on ankles. Control the lower." },
-      ]
-    },
-    {
-      phase: "LOWER", label: "Glutes & Legs", color: "#f5a442", icon: "🔽",
-      exercises: [
-        { name: "Squats", sets: 3, reps: 15, rest: 30, eq: [{l:"10kg Vest",c:"#f5a442"}], tip: "Feet shoulder width. Drive through heels. Pause at bottom." },
-        { name: "Reverse Lunges", sets: 2, reps: "10 each", rest: 30, eq: [{l:"10kg Vest",c:"#f5a442"}], tip: "Step back, not forward — easier on knees. Keep torso upright." },
-        { name: "Donkey Kicks", sets: 2, reps: "15 each", rest: 20, eq: [{l:"4kg Ankle",c:"#42f5c8"}], tip: "On all fours. Squeeze glute at top, don't arch lower back." },
-      ]
-    },
-    {
-      phase: "CORE", label: "Core Finisher", color: "#c842f5", icon: "⚡",
-      exercises: [
-        { name: "Dead Hang", sets: 2, reps: "30 sec", rest: 20, eq: [{l:"BW",c:"#888"}], tip: "Grip strength + shoulder decompression. Let everything relax." },
-      ]
-    }
+const WORKOUTS={
+  15:[
+    {phase:"UPPER",label:"Pull & Push",color:"#42b4f5",icon:"🔼",exercises:[
+      {name:"Pull-Ups",sets:3,reps:"Max",rest:45,eq:[{l:"BW",c:"#888"}],tip:"Go to failure each set. Add vest once you can do 10+ clean reps."},
+      {name:"Chin-Ups",sets:2,reps:"Max",rest:45,eq:[{l:"BW",c:"#888"}],tip:"Supinated grip — hits biceps harder. Pause at top."},
+      {name:"Hanging Knee Raises",sets:2,reps:12,rest:30,eq:[{l:"4kg Wrist",c:"#a0f542"}],tip:"Strap wrist weights on ankles. Control the lower."},
+    ]},
+    {phase:"LOWER",label:"Glutes & Legs",color:"#f5a442",icon:"🔽",exercises:[
+      {name:"Squats",sets:3,reps:15,rest:30,eq:[{l:"10kg Vest",c:"#f5a442"}],tip:"Feet shoulder width. Drive through heels. Pause at bottom."},
+      {name:"Reverse Lunges",sets:2,reps:"10 each",rest:30,eq:[{l:"10kg Vest",c:"#f5a442"}],tip:"Step back — easier on knees. Keep torso upright."},
+      {name:"Donkey Kicks",sets:2,reps:"15 each",rest:20,eq:[{l:"4kg Ankle",c:"#42f5c8"}],tip:"On all fours. Squeeze glute at top, don't arch lower back."},
+    ]},
+    {phase:"CORE",label:"Core Finisher",color:"#c842f5",icon:"⚡",exercises:[
+      {name:"Dead Hang",sets:2,reps:"30 sec",rest:20,eq:[{l:"BW",c:"#888"}],tip:"Grip strength + shoulder decompression. Let everything relax."},
+    ]},
   ],
-  30: [
-    {
-      phase: "UPPER", label: "Pull & Push", color: "#42b4f5", icon: "🔼",
-      exercises: [
-        { name: "Wide Grip Pull-Ups", sets: 3, reps: "Max", rest: 45, eq: [{l:"BW",c:"#888"}], tip: "Wider than shoulder width. Hits lats and rear delts harder." },
-        { name: "Standard Pull-Ups", sets: 3, reps: "Max", rest: 45, eq: [{l:"10kg Vest",c:"#f5a442"}], tip: "Add vest if you got 8+ on wide grip. Full hang at bottom." },
-        { name: "Chin-Ups", sets: 3, reps: "Max", rest: 45, eq: [{l:"BW",c:"#888"}], tip: "Slow eccentric (3 sec down) burns the biceps." },
-        { name: "Hanging Straight Leg Raises", sets: 3, reps: 10, rest: 30, eq: [{l:"4kg Ankle",c:"#42f5c8"}], tip: "Keep legs straight, don't swing. Posterior pelvic tilt." },
-      ]
-    },
-    {
-      phase: "LOWER", label: "Glutes & Legs", color: "#f5a442", icon: "🔽",
-      exercises: [
-        { name: "Squats", sets: 3, reps: 20, rest: 30, eq: [{l:"10kg Vest",c:"#f5a442"}], tip: "Tempo: 2 sec down, 1 sec pause, explode up." },
-        { name: "Reverse Lunges", sets: 3, reps: "12 each", rest: 30, eq: [{l:"10kg Vest",c:"#f5a442"}], tip: "Add ankle weights too for extra stimulus." },
-        { name: "Donkey Kicks", sets: 3, reps: "15 each", rest: 20, eq: [{l:"4kg Ankle",c:"#42f5c8"}], tip: "Slow and controlled. Top squeeze for 1 sec." },
-        { name: "Side-Lying Leg Raises", sets: 2, reps: "20 each", rest: 20, eq: [{l:"2kg Ankle",c:"#42d4f5"}], tip: "Lie on side, raise leg to ~45°. Targets glute medius." },
-        { name: "Glute Bridges", sets: 3, reps: 20, rest: 20, eq: [{l:"10kg Vest",c:"#f5a442"},{l:"4kg Ankle",c:"#42f5c8"}], tip: "Vest on hips, ankle weights on. Drive hips up, 2 sec hold at top." },
-        { name: "Calf Raises", sets: 3, reps: 25, rest: 20, eq: [{l:"10kg Vest",c:"#f5a442"}], tip: "Slow down (3 sec), explosive up. Single leg for more challenge." },
-      ]
-    },
-    {
-      phase: "CORE", label: "Core Finisher", color: "#c842f5", icon: "⚡",
-      exercises: [
-        { name: "Hanging Knee Raises", sets: 3, reps: 15, rest: 30, eq: [{l:"2kg Ankle",c:"#42d4f5"}], tip: "Control — no swinging. Touch knees to chest." },
-        { name: "L-Sit Hold (from hang)", sets: 2, reps: "15 sec", rest: 30, eq: [{l:"BW",c:"#888"}], tip: "From dead hang, raise legs to 90° and hold." },
-        { name: "Dead Hang", sets: 2, reps: "40 sec", rest: 20, eq: [{l:"BW",c:"#888"}], tip: "Grip finisher + spinal decompression. Breathe deeply." },
-      ]
-    }
+  30:[
+    {phase:"UPPER",label:"Pull & Push",color:"#42b4f5",icon:"🔼",exercises:[
+      {name:"Wide Grip Pull-Ups",sets:3,reps:"Max",rest:45,eq:[{l:"BW",c:"#888"}],tip:"Wider than shoulder width. Hits lats and rear delts harder."},
+      {name:"Standard Pull-Ups",sets:3,reps:"Max",rest:45,eq:[{l:"10kg Vest",c:"#f5a442"}],tip:"Add vest if you got 8+ on wide grip. Full hang at bottom."},
+      {name:"Chin-Ups",sets:3,reps:"Max",rest:45,eq:[{l:"BW",c:"#888"}],tip:"Slow eccentric (3 sec down) burns the biceps."},
+      {name:"Hanging Straight Leg Raises",sets:3,reps:10,rest:30,eq:[{l:"4kg Ankle",c:"#42f5c8"}],tip:"Keep legs straight, don't swing. Posterior pelvic tilt."},
+    ]},
+    {phase:"LOWER",label:"Glutes & Legs",color:"#f5a442",icon:"🔽",exercises:[
+      {name:"Squats",sets:3,reps:20,rest:30,eq:[{l:"10kg Vest",c:"#f5a442"}],tip:"Tempo: 2 sec down, 1 sec pause, explode up."},
+      {name:"Reverse Lunges",sets:3,reps:"12 each",rest:30,eq:[{l:"10kg Vest",c:"#f5a442"}],tip:"Add ankle weights too for extra stimulus."},
+      {name:"Donkey Kicks",sets:3,reps:"15 each",rest:20,eq:[{l:"4kg Ankle",c:"#42f5c8"}],tip:"Slow and controlled. Top squeeze for 1 sec."},
+      {name:"Side-Lying Leg Raises",sets:2,reps:"20 each",rest:20,eq:[{l:"2kg Ankle",c:"#42d4f5"}],tip:"Lie on side, raise leg to ~45°. Targets glute medius."},
+      {name:"Glute Bridges",sets:3,reps:20,rest:20,eq:[{l:"10kg Vest",c:"#f5a442"},{l:"4kg Ankle",c:"#42f5c8"}],tip:"Vest on hips, ankle weights on. Drive hips up, 2 sec hold at top."},
+      {name:"Calf Raises",sets:3,reps:25,rest:20,eq:[{l:"10kg Vest",c:"#f5a442"}],tip:"Slow down (3 sec), explosive up. Single leg for more challenge."},
+    ]},
+    {phase:"CORE",label:"Core Finisher",color:"#c842f5",icon:"⚡",exercises:[
+      {name:"Hanging Knee Raises",sets:3,reps:15,rest:30,eq:[{l:"2kg Ankle",c:"#42d4f5"}],tip:"Control — no swinging. Touch knees to chest."},
+      {name:"L-Sit Hold (from hang)",sets:2,reps:"15 sec",rest:30,eq:[{l:"BW",c:"#888"}],tip:"From dead hang, raise legs to 90° and hold."},
+      {name:"Dead Hang",sets:2,reps:"40 sec",rest:20,eq:[{l:"BW",c:"#888"}],tip:"Grip finisher + spinal decompression. Breathe deeply."},
+    ]},
   ]
 };
 
-let currentMode = 15;
-const timers = {};
+let currentMode=15;
+const timers={};
 
-function setMode(m) {
-  currentMode = m;
-  document.getElementById('btn15').classList.toggle('active', m === 15);
-  document.getElementById('btn30').classList.toggle('active', m === 30);
-  Object.values(timers).forEach(t => clearInterval(t.interval));
-  Object.keys(timers).forEach(k => delete timers[k]);
+function showTab(t){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+t).classList.add('active');
+  document.getElementById('tab-'+t).classList.add('active');
+}
+
+function setMode(m){
+  currentMode=m;
+  document.getElementById('btn15').classList.toggle('active',m===15);
+  document.getElementById('btn30').classList.toggle('active',m===30);
+  Object.values(timers).forEach(t=>clearInterval(t.interval));
+  Object.keys(timers).forEach(k=>delete timers[k]);
   render();
 }
 
-function render() {
-  const container = document.getElementById('workout-container');
-  container.innerHTML = '';
-  WORKOUTS[currentMode].forEach((block, bi) => {
-    const phase = document.createElement('div');
-    phase.className = 'phase';
-    phase.style.borderColor = block.color + '44';
-
-    const header = document.createElement('div');
-    header.className = 'phase-header';
-    header.style.background = block.color + '18';
-    header.style.borderBottomColor = block.color + '44';
-    header.innerHTML = `
-      <span class="phase-icon">${block.icon}</span>
-      <div>
-        <div class="phase-name" style="color:${block.color}">${block.phase}</div>
-        <div class="phase-title">${block.label}</div>
-      </div>
-      <span class="phase-count">${block.exercises.length} exercises</span>
-    `;
-    phase.appendChild(header);
-
-    block.exercises.forEach((ex, ei) => {
-      const id = `${bi}-${ei}`;
-      const row = document.createElement('div');
-      row.className = 'ex-row';
-
-      const tags = ex.eq.map(e =>
-        `<span class="eq-tag" style="background:${e.c}22;border:1px solid ${e.c}66;color:${e.c}">${e.l}</span>`
-      ).join('');
-
-      row.innerHTML = `
-        <div class="ex-main" onclick="toggleTip('${id}')">
-          <span class="ex-num">${String(ei+1).padStart(2,'0')}</span>
-          <div class="ex-info">
-            <div class="ex-name">${ex.name}</div>
-            <div class="ex-sets">${ex.sets} × ${ex.reps}</div>
-          </div>
-          <div class="ex-tags">${tags}</div>
-          <button class="timer-btn" id="tbtn-${id}" onclick="startTimer(event,'${id}',${ex.rest})">⏱ ${ex.rest}s</button>
-          <span class="chevron" id="chev-${id}">▼</span>
-        </div>
-        <div class="ex-tip" id="tip-${id}">💡 ${ex.tip}</div>
-      `;
-      phase.appendChild(row);
+function render(){
+  const c=document.getElementById('workout-container');c.innerHTML='';
+  WORKOUTS[currentMode].forEach((block,bi)=>{
+    const p=document.createElement('div');p.className='phase';p.style.borderColor=block.color+'44';
+    p.innerHTML=`<div class="ph" style="background:${block.color}18;border-bottom-color:${block.color}44"><span class="ph-icon">${block.icon}</span><div><div class="ph-name" style="color:${block.color}">${block.phase}</div><div class="ph-title">${block.label}</div></div><span class="ph-cnt">${block.exercises.length} exercises</span></div>`;
+    block.exercises.forEach((ex,ei)=>{
+      const id=`${bi}-${ei}`;
+      const row=document.createElement('div');row.className='ex-row';
+      const tags=ex.eq.map(e=>`<span class="etag" style="background:${e.c}22;border:1px solid ${e.c}66;color:${e.c}">${e.l}</span>`).join('');
+      row.innerHTML=`<div class="ex-main" onclick="toggleTip('${id}')"><span class="ex-num">${String(ei+1).padStart(2,'0')}</span><div class="ex-info"><div class="ex-name">${ex.name}</div><div class="ex-sets">${ex.sets} × ${ex.reps}</div></div><div class="ex-tags">${tags}</div><button class="tbtn" id="tbtn-${id}" onclick="startTimer(event,'${id}',${ex.rest})">⏱ ${ex.rest}s</button><span class="chev" id="chev-${id}">▼</span></div><div class="ex-tip" id="tip-${id}">💡 ${ex.tip}</div>`;
+      p.appendChild(row);
     });
-
-    container.appendChild(phase);
+    c.appendChild(p);
   });
 }
 
-function toggleTip(id) {
-  const tip = document.getElementById('tip-'+id);
-  const chev = document.getElementById('chev-'+id);
-  tip.classList.toggle('open');
-  chev.textContent = tip.classList.contains('open') ? '▲' : '▼';
+function toggleTip(id){
+  document.getElementById('tip-'+id).classList.toggle('open');
+  document.getElementById('chev-'+id).textContent=document.getElementById('tip-'+id).classList.contains('open')?'▲':'▼';
 }
 
-function startTimer(e, id, seconds) {
+function startTimer(e,id,seconds){
   e.stopPropagation();
-  const btn = document.getElementById('tbtn-'+id);
-
-  if (timers[id] && timers[id].running) {
-    clearInterval(timers[id].interval);
-    timers[id].running = false;
-    btn.className = 'timer-btn';
-    btn.innerHTML = `⏱ ${seconds}s`;
-    return;
-  }
-
-  let remaining = seconds;
-  btn.className = 'timer-btn running';
-
-  const tick = () => {
-    remaining--;
-    const pct = ((seconds - remaining) / seconds) * 100;
-    btn.innerHTML = `<div class="timer-progress" style="width:${pct}%"></div><span style="position:relative">${remaining}s</span>`;
-    if (remaining <= 0) {
-      clearInterval(timers[id].interval);
-      timers[id].running = false;
-      btn.className = 'timer-btn';
-      btn.innerHTML = `✓ Go!`;
-      setTimeout(() => { btn.innerHTML = `⏱ ${seconds}s`; }, 1500);
-    }
-  };
-
-  timers[id] = { interval: setInterval(tick, 1000), running: true };
-  tick();
+  const btn=document.getElementById('tbtn-'+id);
+  if(timers[id]&&timers[id].running){clearInterval(timers[id].interval);timers[id].running=false;btn.className='tbtn';btn.innerHTML=`⏱ ${seconds}s`;return;}
+  let remaining=seconds;btn.className='tbtn running';
+  const tick=()=>{remaining--;const pct=((seconds-remaining)/seconds)*100;btn.innerHTML=`<div class="tprog" style="width:${pct}%"></div><span style="position:relative">${remaining}s</span>`;if(remaining<=0){clearInterval(timers[id].interval);timers[id].running=false;btn.className='tbtn';btn.innerHTML=`✓ Go!`;setTimeout(()=>{btn.innerHTML=`⏱ ${seconds}s`;},1500);}};
+  timers[id]={interval:setInterval(tick,1000),running:true};tick();
 }
 
-// Service Worker for offline support
-if ('serviceWorker' in navigator) {
-  const sw = `
-    self.addEventListener('install', e => e.waitUntil(
-      caches.open('workout-v1').then(c => c.addAll(['/']))
-    ));
-    self.addEventListener('fetch', e => e.respondWith(
-      caches.match(e.request).then(r => r || fetch(e.request))
-    ));
-  `;
-  const blob = new Blob([sw], {type: 'application/javascript'});
-  navigator.serviceWorker.register(URL.createObjectURL(blob));
+function toggleHT(el){el.querySelector('.hetip').classList.toggle('open');}
+
+// LADDER
+const RUNGS=[2,4,6,8,10,12,14,16,18,20,18,16,14,12,10,8,6,4,2];
+let lState=RUNGS.map(()=>false);
+let lCur=0;
+
+function buildLadder(){
+  const g=document.getElementById('lgrid');g.innerHTML='';
+  RUNGS.forEach((p,i)=>{
+    const d=document.createElement('div');
+    d.className='rung'+(lState[i]?' done':i===lCur&&!lState[i]?' cur':'');
+    d.innerHTML=`<div class="rn">${p}</div><div class="rl">✊</div>`;
+    d.onclick=()=>{lState[i]=!lState[i];if(lState[i]&&i===lCur){for(let j=i+1;j<RUNGS.length;j++){if(!lState[j]){lCur=j;break;}}}buildLadder();};
+    g.appendChild(d);
+  });
+  updateLS();
 }
 
-render();
+function nextRung(){if(lCur<RUNGS.length){lState[lCur]=true;for(let j=lCur+1;j<RUNGS.length;j++){if(!lState[j]){lCur=j;break;}}}buildLadder();}
+function resetLadder(){lState=RUNGS.map(()=>false);lCur=0;buildLadder();}
+function updateLS(){
+  const done=lState.filter(Boolean).length;const s=document.getElementById('lstatus');
+  if(done===0){s.innerHTML='Tap a rung to start';return;}
+  if(done===RUNGS.length){s.innerHTML='🏔️ <strong>Done. 19 burpees, 190 punches.</strong>';return;}
+  const punches=lState.reduce((a,v,i)=>v?a+RUNGS[i]:a,0);
+  s.innerHTML=`Rung ${done}/${RUNGS.length} — <strong>${done} burpees</strong>, <strong>${punches} punches</strong>`;
+}
+
+if('serviceWorker' in navigator){const sw=`self.addEventListener('install',e=>e.waitUntil(caches.open('wo-v2').then(c=>c.addAll(['/']))));self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'})));}
+
+render();buildLadder();
 </script>
 </body>
 </html>
